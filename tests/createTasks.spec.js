@@ -1,22 +1,27 @@
 const { test, expect } = require('@playwright/test');
 const { authLoginPage, dashboardPage } = require('../support/helpers');
 const LoginPage = require('../pageObjects/LoginPage');
-const TasksPage = require('../pageObjects/TasksPage');
+const TasksPage = require('../pageObjects/tasksPage');
 
 test.beforeEach(async ({ page }) => {
-	const loginPage = new LoginPage(page);
-	const username = process.env.USERNAME;
-	const password = process.env.PASSWORD;
+    const loginPage = new LoginPage(page);
+    const username = process.env.USERNAME;
+    const password = process.env.PASSWORD;
 
-	await page.goto(authLoginPage);
-	await loginPage.login(username, password);
-	await loginPage.waitForLoginSuccess();
-
-	// Verify that the user is redirected to the dashboard page
-	await expect(page).toHaveURL(dashboardPage);
+    // Action: Log in before each test
+    await page.goto(authLoginPage);
+    await loginPage.login(username, password);
+    await loginPage.waitForLoginSuccess();
 });
 
-test('Create new task', async ({ page }) => {
+test('Verify redirection to dashboard after login', async ({ page }) => {
+
+    // Verify that the user is on the dashboard page
+    await expect(page).toHaveURL(dashboardPage);
+});
+
+
+test('Create new task & verify task creation', async ({ page }) => {
     const taskPage = new TasksPage(page);
     const taskName = `Task ${Date.now()}`;
     await taskPage.createTask(taskName);

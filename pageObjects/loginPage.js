@@ -1,11 +1,12 @@
 class LoginPage {
 	constructor(page) {
 		this.page = page;
-		this.usernameInput = '#element-0';
-		this.passwordInput = '#element-3';
+		this.usernameInput = 'input[type="email"]';
+		this.passwordInput = 'input[type="password"]';
 		this.loginButton = '[data-gtm-id="start-email-login"]';
 		this.sidebarContainer = 'button[aria-label="Settings"]';
 		this.errorMessage = 'div:has-text("Wrong email or password.")';
+		this.emptyPasswrodMessage = 'p:has-text("Passwords must be at least 8 characters long.")';
 	}
 
 	async login(username, password) {
