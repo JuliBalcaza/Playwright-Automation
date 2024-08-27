@@ -1,40 +1,56 @@
 const { test, expect } = require('@playwright/test');
 const { authLoginPage, dashboardPage } = require('../support/helpers');
-const LoginPage = require('../pageObjects/loginPage');
-const TasksPage = require('../pageObjects/tasksPage')
-
-let loginPage;
-let tasksPage;
+const LoginPage = require('../pageObjects/LoginPage');
+const TasksPage = require('../pageObjects/TasksPage');
 
 test.beforeEach(async ({ page }) => {
-	loginPage = new LoginPage(page);
-	tasksPage = new TasksPage(page);
+	const loginPage = new LoginPage(page);
 	const username = process.env.USERNAME;
 	const password = process.env.PASSWORD;
 
 	await page.goto(authLoginPage);
 	await loginPage.login(username, password);
+	await loginPage.waitForLoginSuccess();
+
+	// Verify that the user is redirected to the dashboard page
+	await expect(page).toHaveURL(dashboardPage);
 });
 
-test.skip('Create new task and validate', async ({ page }) => {
-	const tasksPage = new TasksPage(page);
-	const taskName = `Task ${Date.now()}`;
+test('Create new task', async ({ page }) => {
+    const taskPage = new TasksPage(page);
+    const taskName = `Task ${Date.now()}`;
+    await taskPage.createTask(taskName);
 
-	await page.goto(dashboardPage);
-	await tasksPage.createTask(taskName);
-
-	const taskExists = await tasksPage.isTaskVisible(taskName);
-	expect(taskExists).toBeTruthy();
+    // Verify that the task has been created and is visible.
+    const isVisible = await taskPage.waitForTaskToBeVisible(taskName);
+    expect(isVisible).toBeTruthy();
 });
 
-test.skip('Create 10 new tasks with dynamic names', async ({ page }) => {
-	await page.goto(dashboardPage);
 
-	for (let i = 1; i <= 10; i++) {
-		const taskName = `Task ${Date.now()} - ${i}`;
-		await tasksPage.createTask(taskName);
+test('Create 10 new tasks with dynamic names', async ({ page }) => {
+    const taskPage = new TasksPage(page);
+    await page.goto(dashboardPage);
+    const taskNames = [];
 
-		const taskExists = await tasksPage.validateTaskExists(taskName);
-		expect(taskExists).toBeTruthy();
-	}
+    // Store new names in taskNames
+    for (let i = 1; i <= 10; i++) {
+        const taskName = `Task ${Date.now()} - ${i}`;
+        await taskPage.createTask(taskName);
+
+        const isVisible = await taskPage.waitForTaskToBeVisible(taskName);
+        expect(isVisible).toBeTruthy();
+
+		 // Add the task name to the array
+        taskNames.push(taskName);
+    }
+
+    // Mark all tasks as completed
+    for (const taskName of taskNames) {
+        await taskPage.markTaskAsComplete(taskName);
+    }
+
+    // Explicit wait before test end to ensure that tasks are completed
+    await page.waitForTimeout(3000);
 });
+
+
