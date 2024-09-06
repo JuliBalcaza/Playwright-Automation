@@ -1,4 +1,4 @@
-# Onboarding Challenge
+# Playwright Testing Practice - Todoist Web App
 
 ## Overview - Playwright Testing
 
@@ -8,7 +8,7 @@ This project is an initial step towards automation testing for the Todoist web a
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/JuliBalcaza/Playwright-Automation
    ```
 2. Install dependencies:
    ```bash
@@ -36,6 +36,10 @@ To run tests in debug mode:
 ```bash
 npx playwright test --debug
 ```
+## Enhancements
+- API testing capabilities.
+
+- Integrate with CI/CD pipelines to enable automated test execution for every code push.
 
 ## CI/CD
 
