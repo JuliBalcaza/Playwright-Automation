@@ -4,7 +4,7 @@ class LoginPage {
 		this.usernameInput = 'input[type="email"]';
 		this.passwordInput = 'input[type="password"]';
 		this.loginButton = '[data-gtm-id="start-email-login"]';
-		this.sidebarContainer = 'button[aria-label="Settings"]';
+		this.sidebarContainer = 'button[aria-label="Configuración"]';
 		this.errorMessage = 'div:has-text("Wrong email or password.")';
 		this.emptyPasswrodMessage = 'p:has-text("Passwords must be at least 8 characters long.")';
 	}

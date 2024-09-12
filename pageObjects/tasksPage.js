@@ -1,8 +1,8 @@
 class TasksPage {
     constructor(page) {
         this.page = page;
-        this.addTaskButton = 'button:has-text("Add task")';
-        this.taskNameInput = '[aria-label="Task name"]';
+        this.addTaskButton = 'button:has-text("Añadir tarea")';
+        this.taskNameInput = '[aria-label="Nombre de la tarea"]';
         this.submitTaskButtonModal = '[data-testid="task-editor-submit-button"]';
     }
 
@@ -32,7 +32,7 @@ class TasksPage {
         const taskSelector = `div[data-task-list-id="${today}"] li.task_list_item:has-text("${taskName}")`;
 
         // Locate the button to mark as completed the task
-        const completeButtonSelector = `${taskSelector} button[aria-label="Mark task as complete"]`;
+        const completeButtonSelector = `${taskSelector} button[aria-label="Marca la tarea como completada"]`;
         const completeButton = this.page.locator(completeButtonSelector);
 
         // Scroll to the button and click on it
